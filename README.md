@@ -1,113 +1,179 @@
-# Curriculo Match Mestre
+# CVRadar ATS — Currículo Match Mestre
 
-MEGA PROMPT — CVRadar ATS
-Missão e restrições
-Crie uma aplicação web 100% funcional chamada CVRadar ATS, em português brasileiro, para comparar um currículo colado em texto com a descrição de uma vaga e gerar uma versão reorganizada, clara e amigável a sistemas ATS.
+**Seu currículo com mais clareza para cada oportunidade.**
 
-Prioridade absoluta: entregar o fluxo completo e testável em uma única geração. Não entregue somente um protótipo visual. Todas as ações exibidas devem funcionar. Não faça perguntas: use as especificações abaixo. Evite complexidade desnecessária.
+Aplicação web que compara um currículo com a descrição de uma vaga, identifica competências relevantes e organiza uma versão mais simples de ler por sistemas de recrutamento (ATS), **sem inventar experiências ou qualificações**.
 
-Escopo obrigatório: colar vaga, colar currículo, analisar compatibilidade, exibir palavras-chave presentes e ausentes, gerar versão ATS-friendly editável, exportar para PDF e copiar ou baixar o texto.
+**[Acessar aplicação](https://curriculo-match-mestre.lovable.app)** · **[Repositório GitHub](https://github.com/LuizPedrao/curriculo-match-mestre)** · **[Mega prompt utilizado](docs/mega-prompt.md)**
 
-Regra ética inegociável: NUNCA criar cargos, empresas, datas, escolaridade, cursos, certificações, ferramentas, resultados, responsabilidades ou habilidades que não constem do currículo original. Nunca inserir automaticamente no currículo final palavras-chave ausentes. As ausentes aparecem APENAS como oportunidades de revisão e devem ser adicionadas manualmente pelo usuário, se forem verdadeiras. Não prometa aprovação em ATS, entrevista ou contratação.
-Identidade visual
-- Nome: CVRadar ATS.
-- Slogan: "Seu currículo com mais clareza para cada oportunidade."
-- Aparência: SaaS moderno, limpo, acessível e profissional, com visual premium e sem excesso de elementos.
-- Stack: React, TypeScript, Tailwind CSS, shadcn/ui e lucide-react, aproveitando a estrutura padrão gerada pelo Lovable.
-- Paleta: azul-marinho #0F172A (texto/cabeçalhos), azul #2563EB (principal), turquesa #14B8A6 (sucesso), fundo #F8FAFC, branco #FFFFFF, âmbar #F59E0B (atenção).
-- Tipografia: Inter ou equivalente sem serifa; cartões com bordas suaves e sombras discretas; bom espaçamento; responsivo, mobile-first.
-- Use componentes reais do shadcn/ui: Button, Card, Badge, Tabs, Textarea, Progress, Alert, Tooltip e Separator quando úteis.
-- Acessibilidade: labels visíveis, contraste adequado, foco de teclado, aria-live em mensagens de resultado, texto legível e estados de carregamento apenas quando houver trabalho.
-- Não precisa de imagens geradas, vídeos, dashboard, gráficos complexos, animações pesadas ou landing page separada.
-Estrutura de tela única
-1. Cabeçalho com marca CVRadar ATS e selo "Gratuito · Sem cadastro".
-2. Hero compacto: título "Descubra como seu currículo conversa com a vaga", subtítulo explicando a estimativa por palavras-chave, e aviso de honestidade: "Otimizamos a apresentação das suas experiências. Não inventamos qualificações."
-3. Área principal, em duas colunas no desktop e uma coluna no celular:
-   - Campo A: "Descrição da vaga" (textarea grande; contador de caracteres; placeholder objetivo).
-   - Campo B: "Seu currículo" (textarea grande; contador de caracteres; placeholder objetivo).
-   - Seletor simples "Tipo de vaga": Geral | Tecnologia. A seleção influencia apenas o vocabulário para extração e não a veracidade das informações.
-   - Botões funcionais: "Analisar currículo" (ação principal), "Testar com exemplo" (insere dados fictícios completos e coerentes), "Limpar dados" (limpa formulário e resultado, com confirmação simples se houver conteúdo).
-4. Depois da análise, apresentar seção "Resultado da análise":
-   - Indicador numérico de 0 a 100 rotulado "Compatibilidade estimada", acompanhado da descrição "Métrica interna baseada em termos identificados; não é pontuação oficial de um ATS".
-   - Quantidade de termos relevantes identificados na vaga, encontrados no currículo e ausentes.
-   - Duas listas bem distintas de chips: "Palavras-chave encontradas" (turquesa) e "Palavras-chave ausentes" (âmbar).
-   - 3 a 5 recomendações úteis e não genéricas, derivadas do resultado. Exemplo: se "Excel" estiver ausente, sugerir "Se você realmente utiliza Excel, descreva a experiência de forma verificável" e jamais adicionar a palavra ao currículo.
-   - Se não for possível encontrar termos confiáveis, mostrar mensagem honesta e não inventar score.
-5. Seção "Currículo ATS-friendly":
-   - Editor de texto preenchido com versão organizada do currículo, permitindo alterações manuais.
-   - Botões reais "Copiar currículo", "Baixar .txt" e "Exportar PDF".
-   - Antes do export, incluir aviso discreto: "Revise todas as informações antes de enviar."
-6. Rodapé simples: "CVRadar ATS · Projeto educacional · As análises são estimativas, não garantias de aprovação."
-Comportamento obrigatório da análise
-Implemente uma análise determinística no navegador, em funções TypeScript separadas, sem fingir uso de IA e sem chamadas externas. É preferível uma análise heurística honesta que funciona a uma suposta IA não conectada.
-Extração de palavras-chave
-- Normalizar para comparação: caixa baixa, acentos, espaços, pontuação adequada; manter expressão legível na interface.
-- Identificar termos relevantes da vaga com dicionário curado de competências (gerais e, especialmente, tecnologia), incluindo expressões compostas e siglas, como: atendimento ao cliente, gestão de projetos, comunicação, liderança, Excel, Power BI, SQL, Python, JavaScript, TypeScript, React, Git, GitHub, Linux, Windows Server, Active Directory, Microsoft 365, redes, TCP/IP, DNS, firewall, SIEM, SOC, análise de logs, resposta a incidentes, Nmap, ITIL, Azure e AWS.
-- Complementar com extração conservadora de termos relevantes da descrição, excluindo stopwords em português, termos genéricos de recrutamento, artigos, verbos vagos e frases vazias. Não mostrar uma lista dominada por palavras sem valor profissional.
-- Detectar termos compostos como unidades. Não considerar "Java" correspondência de "JavaScript", nem correspondência por substring acidental. Deduplicar variações ortográficas óbvias. Limitar apresentação a cerca de 15 palavras-chave realmente relevantes.
-- Um termo só é "encontrado" se houver evidência textual no currículo original. Caso contrário, fica em "ausentes".
-- Quando possível, dar maior peso a termos técnicos e requisitos explícitos. Não assumir que todas as palavras da vaga são obrigatórias.
-Pontuação transparente
-- Calcular score usando soma dos pesos dos termos encontrados dividida pela soma dos pesos de termos relevantes extraídos da vaga, multiplicada por 100, arredondada; limitar ao intervalo 0–100.
-- Mostrar texto simples "X de Y competências/termos identificados" e deixar claro que é somente aproximação.
-- Se nenhum termo relevante for extraído, não exibir 100% nem inventar valores: apresentar "Análise inconclusiva: descrição insuficiente".
-- O score deve realmente mudar quando vaga ou currículo mudarem e uma nova análise for iniciada, sem valores fixos para demonstração.
-Geração segura da versão ajustada
-- Extrair seções existentes do texto com heurísticas de cabeçalhos comuns em português: nome e contato; resumo/objetivo; competências; experiência profissional; formação; cursos/certificações; projetos; idiomas; outras informações.
-- Reordenar seções identificadas para layout ATS de uma coluna: contato, resumo já existente, competências comprovadas, experiência, formação, certificações, projetos e demais seções.
-- Padronizar apenas nomes de títulos, espaçamento e marcadores. Preservar o texto original de cada experiência e seus fatos. Não criar novos bullets com alegações não presentes.
-- Uma seção "Competências identificadas no currículo" pode reunir termos da vaga efetivamente presentes no currículo, com transparência. Nunca incluir termos faltantes nessa seção.
-- Se os cabeçalhos originais não forem reconhecidos de forma confiável, manter o texto original inteiro, preservar a ordem e apenas aplicar formatação mínima; nunca perder trechos silenciosamente.
-- O resultado é editável antes de baixar. Se o usuário editar manualmente, exportar exatamente a versão editada.
-- Evitar tabelas, ícones, imagens, colunas múltiplas, barras de habilidades e elementos decorativos no currículo exportado.
-Exportação de verdade
-- Copiar: Clipboard API com feedback de sucesso/erro.
-- TXT: gerar um Blob text/plain UTF-8 com nome curriculo-cvradar-ats.txt e fazer download.
-- PDF: implementar versão de impressão estilizada com @media print, contendo SOMENTE o currículo final editado, texto selecionável, tamanho A4, margens adequadas, títulos simples e sem a interface do app. Botão deve executar window.print() para permitir "Salvar como PDF" no navegador. Rotular em apoio: "Na janela de impressão, selecione Salvar como PDF". Não tirar screenshot do currículo nem gerar PDF como imagem, pois isso atrapalha leitura por ATS.
-- Botões de exportação ficam desabilitados até existir currículo gerado.
-Dados de demonstração
-Ao clicar "Testar com exemplo", preencher ambos os campos com textos FICTÍCIOS em português brasileiro, com quantidade suficiente para análise real:
+> **Projeto educacional desenvolvido para um desafio da [DIO](https://www.dio.me/), com apoio do [Lovable](https://lovable.dev/).** A análise representa uma estimativa baseada em palavras-chave; não é um resultado oficial de um ATS nem garante aprovação em processos seletivos.
 
-Vaga fictícia: Analista de Segurança da Informação Júnior. Requisitos: monitoramento de alertas de segurança, análise de logs, fundamentos de redes TCP/IP, Linux, Windows, SIEM, resposta a incidentes, documentação técnica e comunicação. Diferenciais: Python, Azure e Nmap.
+---
 
-Currículo fictício: Marina Costa, contato fictício example.com, "Analista de suporte de TI com experiência em atendimento a usuários, análise de logs do Windows, documentação de chamados, configuração básica de redes TCP/IP e suporte ao ambiente Windows. Formação em Sistemas de Informação. Projeto acadêmico de monitoramento de eventos com Linux. Conhecimentos de Python em projetos de estudo." Não atribuir a ela SOC, SIEM, resposta a incidentes, Nmap ou Azure que não foram informados.
+## 🎯 Problema e objetivo
 
-Exemplo deve gerar termos encontrados E ausentes, e permitir testar o botão de análise e as exportações. Marcar claramente "Exemplo fictício".
-Estados de UX e segurança de dados
-- Exigir descrição da vaga e currículo não vazios e com extensão mínima razoável; usar validações com mensagens acessíveis sem quebrar a tela.
-- Não persistir currículo em banco de dados, localStorage, cookies ou analytics. Manter dados apenas em memória enquanto a página estiver aberta.
-- Não implementar login, banco, Supabase, Lovable Cloud backend, Edge Functions, APIs externas, chaves de IA, autenticação, integrações pagas ou histórico nesta primeira versão.
-- Não enviar texto do currículo ou descrição da vaga a servidores de terceiros. O processamento deve ocorrer no cliente.
-- Garantir que o botão "Limpar dados" remova as informações da sessão atual da interface.
-- Mensagens curtas, reais e honestas; nada de métricas artificiais, usuários fictícios ou depoimentos falsos.
-- SEO básico com <title>CVRadar ATS | Analise seu currículo para vagas</title>, meta description e idioma pt-BR.
-Entrega técnica e critérios de aceite
-- Criar estrutura organizada, por exemplo: src/components para formulário e resultado, src/lib/ats para extração e pontuação, src/lib/resume para reorganização e src/data para exemplo fictício. Ajustar à arquitetura gerada pelo Lovable.
-- Usar tipagem TypeScript clara e tratar casos extremos (texto vazio, ausência de palavras-chave, acentos, duplicatas, currículos longos, responsividade).
-- Verificar internamente o fluxo: carregar exemplo → analisar → mostrar encontrados/ausentes → abrir currículo final editável → copiar → baixar TXT → exportar com impressão A4. Corrigir erros de compilação identificados antes de encerrar.
-- O aplicativo final deve ser utilizável com os dados inseridos pelo usuário, não apenas o exemplo.
-- Não gerar páginas ou funcionalidades fora desse escopo. Não gastar processamento com imagens geradas.
-ENTREGUE A APLICAÇÃO FUNCIONAL COMPLETA NO BUILD INICIAL. Não explique somente o plano. Se tiver de priorizar, garanta primeiro o fluxo completo do desafio e depois os detalhes visuais.
+Mesmo quando um candidato possui experiências relevantes, o currículo pode não destacar os termos utilizados na descrição de uma vaga. Isso dificulta a leitura e a comparação do perfil, tanto por ferramentas automatizadas quanto por recrutadores.
 
-This project was built with [Lovable](https://lovable.dev).
+O **CVRadar ATS** ajuda a identificar essas diferenças e a apresentar o histórico profissional com mais clareza. A aplicação foi pensada para ser **gratuita, sem cadastro, responsiva e utilizável diretamente no navegador**.
 
-**Live app**: https://curriculo-match-mestre.lovable.app
+## ✨ Funcionalidades
 
-## Build with Lovable
+| Recurso | O que faz |
+| --- | --- |
+| Comparação com a vaga | Recebe a descrição da oportunidade e o currículo em texto. |
+| Compatibilidade estimada | Calcula uma pontuação de 0 a 100 a partir dos termos relevantes identificados. |
+| Palavras-chave | Separa competências **encontradas** e **ausentes** no currículo. |
+| Recomendações | Sugere pontos de revisão sem incluir automaticamente habilidades não comprovadas. |
+| Currículo ATS-friendly | Reorganiza seções reconhecidas em um formato textual simples e editável. |
+| Exportação | Permite copiar o currículo, baixar um arquivo **.txt** ou usar a impressão do navegador para **salvar em PDF**. |
+| Exemplo fictício | Carrega uma vaga e um currículo demonstrativos para testar o fluxo. |
+| Perfil da vaga | Oferece seleção **Geral** ou **Tecnologia** para orientar a extração de termos. |
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/72a1ba2e-0af3-416e-8c1d-17e36038e9af).
+## 🔎 Como a análise funciona
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+1. **Entrada:** o usuário cola o texto da vaga e do currículo.
+2. **Preparação:** o sistema normaliza os textos para comparação, considerando diferenças de maiúsculas/minúsculas, acentos e pontuação.
+3. **Identificação:** um dicionário de competências e uma extração conservadora procuram termos relevantes na descrição da vaga, inclusive expressões técnicas.
+4. **Comparação:** cada termo é classificado como **encontrado** ou **ausente** com base no conteúdo do currículo original.
+5. **Pontuação:** a aplicação calcula uma média ponderada dos termos encontrados, atribuindo pesos diferentes a requisitos técnicos e diferenciais.
+6. **Revisão:** recomendações orientam o usuário a evidenciar experiências reais. A aplicação reorganiza seções reconhecidas sem criar fatos novos.
+7. **Exportação:** o texto resultante pode ser editado, copiado, baixado em TXT ou impresso como PDF.
 
-## Development
+A fórmula usada para a estimativa é:
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+```text
+Compatibilidade = 100 × (soma dos pesos encontrados / soma dos pesos analisados)
+```
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+Os termos são limitados a uma seleção relevante (até aproximadamente 15). Se não houver termos suficientes para uma análise confiável, a aplicação indica que o resultado é **inconclusivo**, em vez de inventar uma nota.
+
+**Importante:** a pontuação mede correspondência textual dentro deste projeto. Ela não avalia todo o contexto profissional do candidato nem reproduz a classificação de plataformas ATS comerciais.
+
+## 🛡️ Princípio de honestidade
+
+O CVRadar ATS **não deve inventar** empresas, cargos, períodos, cursos, certificações, atividades ou competências.
+
+- Termos ausentes são apresentados como **oportunidades de revisão**, não adicionados automaticamente ao currículo.
+- A versão ajustada preserva as informações fornecidas pelo usuário, com reorganização de seções e formatação simples.
+- O usuário pode revisar e editar o texto antes de exportar.
+- A análise é feita com lógica determinística no navegador, **sem chamar um modelo de IA para avaliar o currículo**.
+
+O uso de IA generativa ocorreu no **processo de construção do projeto com o Lovable**, não como promessa de inteligência artificial externa na análise final.
+
+## 🧰 Tecnologias
+
+| Tecnologia | Aplicação no projeto |
+| --- | --- |
+| **Lovable** | Geração inicial e evolução da aplicação a partir do prompt. |
+| **React + TypeScript** | Interface, componentes e regras tipadas. |
+| **TanStack Start / Router** | Estrutura de rotas da aplicação gerada. |
+| **Tailwind CSS** | Estilização responsiva. |
+| **shadcn/ui + Lucide React** | Componentes visuais e ícones. |
+| **Vite** | Desenvolvimento e build. |
+| **Vitest** | Testes automatizados. |
+| **Git + GitHub** | Versionamento e documentação da entrega. |
+
+### Estrutura principal
+
+```text
+.
+├── docs/
+│   └── mega-prompt.md               # Prompt original da geração no Lovable
+├── public/                           # Arquivos públicos
+├── src/
+│   ├── components/cvradar/
+│   │   ├── AnalysisResult.tsx        # Pontuação, termos e recomendações
+│   │   ├── ResumeEditor.tsx          # Edição e exportações
+│   │   └── PrintableResume.tsx       # Currículo preparado para impressão
+│   ├── data/example.ts              # Vaga e currículo fictícios
+│   ├── lib/
+│   │   ├── ats/                      # Dicionário, normalização e análise
+│   │   └── resume/reorganize.ts      # Organização do currículo
+│   └── routes/index.tsx             # Tela principal
+├── package.json
+└── README.md
+```
+
+## 🚀 Executar localmente
+
+Pré-requisito: **Node.js** instalado.
+
+```bash
+git clone https://github.com/LuizPedrao/curriculo-match-mestre.git
+cd curriculo-match-mestre
+npm install
 npm run dev
 ```
+
+Abra o endereço local informado no terminal. Para compilar e testar:
+
+```bash
+npm run build
+npm run test
+npm run lint
+```
+
+Os scripts acima estão definidos em `package.json`. O projeto também contém testes da análise de palavras-chave e da rota principal, incluindo situações como a distinção entre **Java** e **JavaScript**, ausência de termos e preservação de competências realmente presentes.
+
+## 🧪 Demonstração e validação
+
+**Acesse:** https://curriculo-match-mestre.lovable.app
+
+Para reproduzir o fluxo principal:
+
+1. Clique em **Testar com exemplo**.
+2. Confira a vaga fictícia de **Analista de Segurança da Informação Júnior** e o currículo demonstrativo.
+3. Clique em **Analisar currículo**.
+4. Observe a pontuação estimada e os grupos de palavras-chave presentes e ausentes.
+5. Revise o currículo reorganizado no editor.
+6. Experimente **Copiar currículo**, **Baixar .txt** e **Exportar PDF**. Para PDF, escolha **Salvar como PDF** na janela de impressão.
+
+O exemplo é fictício e foi incluído para permitir a reprodução do funcionamento sem expor dados pessoais.
+
+> **Evidências visuais:** capturas reais do formulário preenchido, do resultado da análise e da exportação poderão ser adicionadas ao repositório após a validação manual da aplicação publicada. Não foram incluídas imagens ilustrativas no lugar de testes reais.
+
+## 🧠 Engenharia de prompt e evolução
+
+O desafio propôs a criação da aplicação do zero no Lovable a partir de um **mega prompt em Markdown**. O documento completo utilizado na primeira geração foi preservado em:
+
+**➡️ [docs/mega-prompt.md](docs/mega-prompt.md)**
+
+### Decisões definidas no prompt inicial
+
+- Priorizar o **MVP completo**: comparação, recomendações, edição e exportação.
+- Adotar **React, TypeScript, Tailwind CSS e shadcn/ui**, com visual limpo e responsivo.
+- Utilizar uma **análise local e transparente**, sem dependência de API paga, login ou banco de dados.
+- Dar atenção a competências da área de **tecnologia e segurança da informação**, sem restringir o uso a esse setor.
+- Impedir a inclusão automática de conhecimentos inexistentes no histórico original.
+
+### Da especificação à implementação
+
+A implementação gerada utiliza a estrutura **TanStack Start/Router**, funções específicas para normalização e análise, um módulo de reorganização do currículo e componentes separados para resultados e exportação. A saída em PDF é oferecida pela **impressão do navegador**, permitindo salvar um documento com texto selecionável.
+
+**Refinamentos posteriores:** não há, nesta documentação, registro confirmado de mudanças solicitadas depois da geração inicial. Novos ajustes devem ser anotados aqui com **o que foi alterado, por que foi necessário e qual foi o resultado**, mantendo o histórico da evolução verificável.
+
+## 🔐 Privacidade e limitações
+
+- O conteúdo analisado é processado **no navegador**, sem login ou persistência em banco de dados nesta versão.
+- A aplicação trabalha com **texto colado**; não oferece upload de currículos em DOCX/PDF no MVP.
+- A análise é baseada em **termos e regras heurísticas**, portanto pode não identificar sinônimos, equivalências ou competências implícitas.
+- **Exportar PDF** abre a impressão do navegador; o usuário deve escolher **Salvar como PDF**.
+- A ferramenta ajuda a revisar o currículo, mas **não garante contratação nem aprovação em ATS**.
+
+## 🗺️ Possíveis evoluções
+
+- Importação e exportação em DOCX.
+- Histórico de análises, com consentimento do usuário.
+- Expansão do vocabulário para outras áreas profissionais.
+- Melhor detecção de equivalências e sinônimos.
+- Inclusão de capturas reais de testes no repositório.
+
+---
+
+### 👨‍💻 Autor
+
+**[Luiz Pedrão](https://github.com/LuizPedrao)**
+
+Desenvolvido como projeto prático de portfólio e entrega educacional da **DIO**.
+
+**[Ver aplicação publicada](https://curriculo-match-mestre.lovable.app)** · **[Ver o código no GitHub](https://github.com/LuizPedrao/curriculo-match-mestre)**
