@@ -29,7 +29,7 @@ export const GENERAL_TERMS: DictTerm[] = [
   g("Gestão de equipes", ["gestao de equipe"]),
   g("Indicadores", ["kpi", "kpis"]),
   g("Relatórios", ["relatorio", "elaboracao de relatorios"]),
-  g("Documentação técnica", ["documentacao", "documentar"]),
+  g("Documentação", ["documentacao tecnica", "documentar"]),
   g("Inglês", ["ingles avancado", "ingles intermediario", "ingles fluente"]),
   g("Espanhol"),
   g("Excel", ["excel avancado", "microsoft excel"]),
