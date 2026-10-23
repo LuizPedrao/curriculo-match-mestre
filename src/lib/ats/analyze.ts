@@ -78,9 +78,12 @@ export function analyze(job: string, resume: string, type: JobType): AnalysisRes
   }
 
   // Conservative complement: meaningful words repeated in the job (>=2x), not covered by the dictionary.
+  const covered = new Set(
+    [...matched.values()].flatMap(({ term }) => term.variants.flatMap((v) => normalize(v).trim().split(" "))),
+  );
   const counts = new Map<string, number>();
   for (const w of working.split(" ")) {
-    if (w.length < 5 || w.includes("_") || STOPWORDS.has(w) || /^\d+$/.test(w)) continue;
+    if (w.length < 5 || w.includes("_") || STOPWORDS.has(w) || covered.has(w) || /^\d+$/.test(w)) continue;
     counts.set(w, (counts.get(w) ?? 0) + 1);
   }
   const extracted = [...counts.entries()].filter(([, c]) => c >= 2).sort((a, b) => b[1] - a[1]).slice(0, 4);
